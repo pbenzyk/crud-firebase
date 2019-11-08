@@ -61,6 +61,7 @@ const actions = {
                 console.log(error)
             });
         actions.addData();
+        location.replace('/#/profile');
         // await store.dispatch('loading/loadingOff');
     },
     async addData() {
