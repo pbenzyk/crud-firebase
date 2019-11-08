@@ -4,11 +4,21 @@ import { make } from 'vuex-pathify'
 import firebase from "firebase";
 const state = {
     dialogUser: false,
+    dialogEditUser: false,
+    readEmail: "",
     formUser: {
         email: '',
         password: ''
     },
     formProfile: {
+        address: "",
+        age: "",
+        email: "",
+        firstname: "",
+        lastname: "",
+        phone: ""
+    },
+    formUpdateProfile: {
         address: "",
         age: "",
         email: "",
@@ -83,6 +93,39 @@ const actions = {
             });
 
         console.log('userCard =>', state.userCard);
+    },
+    async getProfileUpdate() {
+        console.log("getProfileUpdate", state.readEmail)
+        let db = firebase.firestore();
+        db.collection("userprofile").doc(state.readEmail)
+            .onSnapshot(function (doc) {
+                state.formUpdateProfile = doc.data()
+                console.log("Current data: ", doc.data());
+                // console.log("Profile data: ", state.profile);
+            });
+        console.log("Profile data readEmail: ", state.formUpdateProfile);
+    },
+    async updateProfileUpdate() {
+        let db = firebase.firestore();
+        let washingtonRef = db.collection("userprofile").doc(state.readEmail);
+
+        // Set the "capital" field of the city 'DC'
+        return washingtonRef.update({
+            address: state.formUpdateProfile.address,
+            age: state.formUpdateProfile.age,
+            firstname: state.formUpdateProfile.firstname,
+            lastname: state.formUpdateProfile.lastname,
+            phone: state.formUpdateProfile.phone
+        })
+            .then(function () {
+                state.dialogEditUser = false
+                actions.readData()
+                console.log("Document successfully updated!");
+            })
+            .catch(function (error) {
+                // The document probably doesn't exist.
+                console.error("Error updating document: ", error);
+            });
     }
 
 }

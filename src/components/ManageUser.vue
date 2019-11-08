@@ -1,4 +1,3 @@
-<!----------Make By YourName---------------->
  <template>
   <v-container>
     <v-card outlined>
@@ -65,11 +64,8 @@ import CardUser from "./CardUser";
 import { get, sync, call } from "vuex-pathify";
 export default {
   name: "Root",
-  /*-------------------------Load Component---------------------------------------*/
   components: { CardUser },
-  /*-------------------------Set Component---------------------------------------*/
   props: {},
-  /*-------------------------DataVarible---------------------------------------*/
   data() {
     return {
       show1: false,
@@ -82,29 +78,23 @@ export default {
       }
     };
   },
-  /*-------------------------Run Methods when Start this Page------------------------------------------*/
   async mounted() {
-    /**** Call loading methods*/
     this.load();
   },
-  /*-------------------------Run Methods when Start Routed------------------------------------------*/
   async beforeRouteEnter(to, from, next) {
     next();
   },
-  /*-------------------------Vuex Methods and Couputed Methods------------------------------------------*/
   computed: {
     formProfile: sync("manage/formProfile"),
     formUser: sync("manage/formUser"),
     usCard: sync("manage/userCard"),
     dialogUser: sync("manage/dialogUser")
   },
-  /*-------------------------Methods------------------------------------------*/
   methods: {
     addUser: call("manage/addUser"),
     submit() {
       console.log("formUser", this.formUser);
     },
-    /******* Methods default run ******/
     load: async function() {}
   }
 };

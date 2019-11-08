@@ -1,4 +1,4 @@
-# resume02
+# crud-firebase02
 
 ## Project setup
 ```

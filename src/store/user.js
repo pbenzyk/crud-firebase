@@ -39,6 +39,9 @@ const actions = {
         console.log('email ', state.login.email, ' password ', state.login.password)
         firebase.auth().
             signInWithEmailAndPassword(state.login.email, state.login.password)
+            .then(function () {
+                location.replace('/#/profile');
+            })
             .catch(function (error) {
                 // Handle Errors here.
                 var errorCode = error.code;
@@ -52,6 +55,7 @@ const actions = {
                 console.log(error)
             });
         await actions.setToken()
+        // location.replace('/#/profile');
     },
 
     async setToken() {
@@ -66,11 +70,7 @@ const actions = {
 
                 state.Token.uid = localStorage.getItem("uid");
                 state.Token.email = localStorage.getItem("e-mail");
-                // console.log('KeyName', state.Token)
-                // state.AuthUser = user
-                // console.log('displayName', state.AuthUser)
-                location.replace('/#/profile');
-                // ...
+
             } else {
                 // User is signed out.
                 // ...

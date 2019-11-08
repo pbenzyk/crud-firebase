@@ -1,4 +1,3 @@
-<!----------Make By YourName---------------->
  <template>
   <v-container>
     <v-card class="mx-auto mr-10 pd-10" outlined shaped>
@@ -14,6 +13,7 @@
                     prepend-inner-icon="mdi-account"
                     label="First name"
                     required
+                    :readonly="readonly"
                   ></v-text-field>
                 </v-col>
 
@@ -23,6 +23,7 @@
                     prepend-inner-icon="mdi-account"
                     label="Last name"
                     required
+                    :readonly="readonly"
                   ></v-text-field>
                 </v-col>
 
@@ -32,6 +33,7 @@
                     prepend-inner-icon="mdi-emoticon"
                     label="Age"
                     required
+                    :readonly="readonly"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="8">
@@ -40,6 +42,7 @@
                     prepend-inner-icon="mdi-map"
                     label="Address"
                     required
+                    :readonly="readonly"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="4">
@@ -48,6 +51,7 @@
                     prepend-inner-icon="mdi-cellphone"
                     label="Phone"
                     required
+                    :readonly="readonly"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -55,12 +59,15 @@
           </v-form>
         </v-list-item-content>
 
-        <v-list-item-avatar tile size="80" color="grey"></v-list-item-avatar>
+        <v-list-item-avatar tile size="80">
+          <v-img src="https://pngimage.net/wp-content/uploads/2018/05/account-png-2.png"></v-img>
+        </v-list-item-avatar>
       </v-list-item>
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" @click="updateProfile()">Update Profile</v-btn>
+        <v-btn color="primary" v-if="readonly" @click="clickUpdate()">Update Profile</v-btn>
+        <v-btn color="success" v-else @click="saveUpdate()">Save Profile</v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
@@ -71,14 +78,12 @@
 import { get, sync, call } from "vuex-pathify";
 export default {
   name: "Root",
-  /*-------------------------Load Component---------------------------------------*/
   components: {},
-  /*-------------------------Set Component---------------------------------------*/
   props: {},
-  /*-------------------------DataVarible---------------------------------------*/
   data() {
     return {
       valid: false,
+      readonly: true,
       nameRules: [
         v => !!v || "Name is required",
         v => v.length <= 10 || "Name must be less than 10 characters"
@@ -89,25 +94,27 @@ export default {
       ]
     };
   },
-  /*-------------------------Run Methods when Start this Page------------------------------------------*/
   async mounted() {
-    /**** Call loading methods*/
     this.load();
   },
-  /*-------------------------Run Methods when Start Routed------------------------------------------*/
   async beforeRouteEnter(to, from, next) {
     next();
   },
-  /*-------------------------Vuex Methods and Couputed Methods------------------------------------------*/
   computed: {
     profile: sync("user/profile")
   },
-  /*-------------------------Methods------------------------------------------*/
   methods: {
     getProfile: call("user/getProfile"),
     readData: call("manage/readData"),
     updateProfile: call("user/updateProfile"),
-    /******* Methods default run ******/
+    clickUpdate() {
+      this.readonly = false;
+    },
+    saveUpdate() {
+      this.readonly = true;
+      this.updateProfile();
+    },
+
     load: async function() {
       await this.getProfile();
       await this.readData();
