@@ -4,7 +4,7 @@ import firebase from "firebase";
 import store from './'
 
 const state = {
-    showNav: true,
+    showNav: false,
     login: {
         email: '',
         password: ''
